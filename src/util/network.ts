@@ -1,4 +1,4 @@
-const API_URI = "http://127.0.0.1:4523/m1/2704689-0-default";
+const API_URI = "https://mock.apifox.cn/m1/2704689-0-default";
 
 type Method = "GET" | "POST" | "PUT";
 
