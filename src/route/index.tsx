@@ -10,7 +10,7 @@ const RouterComp: React.FC<any> = () => {
   return (
     <Router history={app.browserHistory}>
       <Switch>
-        <Redirect exact from="/" to="/welcome" />
+        <Redirect exact path="/" to="/welcome" />
         <Route exact path="/welcome" component={Dashboard} />
         <Route exact path="/product/list" component={Product} />
         <Route component={NotFound} />

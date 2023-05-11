@@ -9,13 +9,10 @@ import {
   ProLayout,
   ProLayoutProps,
 } from "@ant-design/pro-components";
-
-import { getMenuList } from "../../service/product";
 import { route } from "../../route/layoutRoute";
 import { RouterComp } from "../../route";
 
 function Main({ changeUrl, pathname }) {
-  console.log("pathname:", pathname);
   return (
     <ProLayout
       bgLayoutImgList={[
@@ -45,7 +42,6 @@ function Main({ changeUrl, pathname }) {
       menuItemRender={(item, dom) => (
         <div
           onClick={() => {
-            console.log(item);
             changeUrl(item.path);
           }}
         >
@@ -61,7 +57,6 @@ function Main({ changeUrl, pathname }) {
 }
 
 const mapStateToProps = (state: RootState) => {
-  console.log("state:", state);
   return {
     pathname: state.app.main.pathname,
   };

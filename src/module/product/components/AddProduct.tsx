@@ -83,7 +83,7 @@ const AddProduct: React.FC<Partial<ProFormProps & ModalProps>> = ({
         onCancel: onCancel,
         destroyOnClose: true,
       }}
-      // initialValues={initialValues}
+      initialValues={initialValues}
       formRef={formRef}
     />
   );

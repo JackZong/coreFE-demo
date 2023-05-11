@@ -26,6 +26,7 @@ import { FormInstance } from "antd/lib/form";
 function ProductList() {
   const [showAddProduct, toggleShowAddProduct] = useState(false);
 
+  const [initialValues, setInitialValues] = useState<ProductList | null>(null);
   const actionRef = useRef<ActionType>(null);
 
   const addProductFormRef = useRef<ProFormInstance>(null);
@@ -114,9 +115,13 @@ function ProductList() {
               href="javascript:void(0)"
               key="edit"
               onClick={() => {
-                console.log(record);
+                // console.log("edit:", record);
                 toggleShowAddProduct(true);
                 addProductFormRef?.current?.setFieldsValue(record);
+                if (!addProductFormRef?.current) {
+                  setInitialValues(record);
+                }
+                //  console.log(addProductFormRef?.current);
               }}
             >
               编辑
@@ -163,6 +168,7 @@ function ProductList() {
         onFinish={async (props) => handleAddProduct(props)}
         onCancel={() => toggleShowAddProduct(false)}
         formRef={addProductFormRef}
+        initialValues={initialValues}
       />
     </>
   );

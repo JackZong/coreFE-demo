@@ -30,6 +30,5 @@ export const pageModule = register(
     pathname: "/welcome",
   })
 );
-export const mainActions = pageModule.getActions();
 
-console.log(pageModule);
+export const mainActions = pageModule.getActions();
