@@ -1,5 +1,4 @@
 import {
-  ProSchema,
   BetaSchemaForm,
   ProFormColumnsType,
   ProFormProps,
@@ -71,6 +70,7 @@ const AddProduct: React.FC<Partial<ProFormProps & ModalProps>> = ({
   onCancel,
   initialValues,
   formRef,
+  loading,
 }) => {
   return (
     <BetaSchemaForm<ProductList>
@@ -85,6 +85,7 @@ const AddProduct: React.FC<Partial<ProFormProps & ModalProps>> = ({
       }}
       initialValues={initialValues}
       formRef={formRef}
+      loading={loading}
     />
   );
 };

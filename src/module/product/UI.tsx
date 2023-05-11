@@ -1,73 +1,48 @@
-import React, {
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useAction, ajax, async, Dispatch } from "core-fe";
-import { useSelector } from "react-redux";
+import React, { useCallback, useEffect, useRef } from "react";
+import type { FC } from "react";
+import { useAction, useDispatch, showLoading, useSelector } from "core-fe";
+import { connect } from "react-redux";
 import { RootState } from "../../../type/state.interface";
-import { mainActions } from "./page";
+import { pageActions, pageModule } from "./page";
 import {
   ActionType,
   ProFormInstance,
   ProTable,
 } from "@ant-design/pro-components";
 import type { ProColumnType, ProColumns } from "@ant-design/pro-components";
-import { ProductList } from "./type";
-import { addProduct, getProductList, updateProductById } from "../../service";
-import { Button, message, notification } from "antd";
+import { ProductList, State, productUpdating } from "./type";
+import { getProductList } from "../../service";
+import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { AddProduct } from "./components/AddProduct";
-import { FormInstance } from "antd/lib/form";
 
-function ProductList() {
-  const [showAddProduct, toggleShowAddProduct] = useState(false);
+interface Props extends State {}
 
-  const [initialValues, setInitialValues] = useState<ProductList | null>(null);
+const ProductList: FC<Props> = ({ productUpdating }) => {
+  //  const [initialValues, setInitialValues] = useState<ProductList | null>(null);
   const actionRef = useRef<ActionType>(null);
 
   const addProductFormRef = useRef<ProFormInstance>(null);
 
+  const dispatch = useDispatch();
+
+  const toggleAddModalShow = useAction(pageActions.toggleAddModalShow);
+
+  // 直接消费state
+  const state = useSelector((state: RootState) => state.app.product);
+
+  useEffect(() => {
+    // 更新商品完毕
+    if (!productUpdating) {
+      actionRef.current?.reload();
+    }
+  }, [productUpdating]);
+
   const handleAddProduct = useCallback((props) => {
-    console.log("props:", props);
     if (props.id) {
-      // edit mode
-      updateProductById(props.id, { ...props, id: undefined }).then((res) => {
-        if (res.status === 200) {
-          notification.success({
-            message: "更新商品成功",
-          });
-          toggleShowAddProduct(false);
-          actionRef.current?.reload();
-          message.info(
-            "刷新了列表，理论上列表数据应该被修改，因使用mock接口不做处理"
-          );
-        } else {
-          notification.error({
-            message: "更新商品失败，请重试！",
-          });
-        }
-      });
+      dispatch(pageActions.updateProductById(props.id, { ...props }));
     } else {
-      addProduct(props).then((res) => {
-        if (res.status === 200) {
-          notification.success({
-            message: "新增商品成功",
-          });
-          toggleShowAddProduct(false);
-          actionRef.current?.reload();
-          message.info(
-            "刷新了列表，理论上列表应该新增一条数据，因使用mock接口不做处理"
-          );
-        } else {
-          notification.error({
-            message: "新增商品失败，请重试！",
-          });
-        }
-      });
+      dispatch(pageActions.addProduct(props));
     }
   }, []);
 
@@ -116,11 +91,12 @@ function ProductList() {
               key="edit"
               onClick={() => {
                 // console.log("edit:", record);
-                toggleShowAddProduct(true);
+                toggleAddModalShow();
                 addProductFormRef?.current?.setFieldsValue(record);
-                if (!addProductFormRef?.current) {
-                  setInitialValues(record);
-                }
+                // if (!addProductFormRef?.current) {
+                //   // setInitialValues(record);
+                //   setTimeout(console.log, 5000, addProductFormRef.current);
+                // }
                 //  console.log(addProductFormRef?.current);
               }}
             >
@@ -137,7 +113,6 @@ function ProductList() {
         columns={columns}
         rowKey="id"
         request={async (params) => {
-          console.log(params);
           const res = await getProductList(params);
           if (res.status === 200) {
             return {
@@ -152,10 +127,7 @@ function ProductList() {
           <Button
             key="button"
             icon={<PlusOutlined />}
-            onClick={() => {
-              // actionRef.current?.reload();
-              toggleShowAddProduct(true);
-            }}
+            onClick={toggleAddModalShow}
             type="primary"
           >
             新建
@@ -164,14 +136,21 @@ function ProductList() {
         actionRef={actionRef}
       />
       <AddProduct
-        open={showAddProduct}
+        open={state.showAddModal}
         onFinish={async (props) => handleAddProduct(props)}
-        onCancel={() => toggleShowAddProduct(false)}
+        onCancel={toggleAddModalShow}
         formRef={addProductFormRef}
-        initialValues={initialValues}
+        //initialValues={initialValues}
+        loading={productUpdating}
       />
     </>
   );
-}
+};
 
-export default ProductList;
+const mapStateToProps = (state: RootState) => {
+  return {
+    productUpdating: showLoading(state, productUpdating),
+  };
+};
+
+export default connect(mapStateToProps)(ProductList);

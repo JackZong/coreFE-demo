@@ -1,3 +1,3 @@
-import MainComponent from "./UI";
+import ProductListComponent from "./UI";
 import { pageModule } from "./page";
-export const Product = pageModule.attachLifecycle(MainComponent);
+export const Product = pageModule.attachLifecycle(ProductListComponent);

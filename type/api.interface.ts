@@ -49,4 +49,10 @@ export declare namespace API {
     message: string;
     data: null;
   }
+
+  interface GetProductAmount {
+    status: number;
+    message: string;
+    data: number;
+  }
 }

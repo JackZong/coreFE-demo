@@ -42,3 +42,11 @@ export const updateProductById = (id: string, data: ProductList) => {
     body: JSON.stringify(data),
   });
 };
+
+/**获取当前商品数量 */
+export const getProductAmount = () => {
+  return request<API.GetProductAmount>({
+    path: `/product/amount`,
+    method: "GET",
+  });
+};

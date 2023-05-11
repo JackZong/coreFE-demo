@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  ChromeFilled,
-  CrownFilled,
-  SmileFilled,
-  TabletFilled,
-} from "@ant-design/icons";
+import { CrownFilled, SmileFilled } from "@ant-design/icons";
 
 export const route = {
   path: "/",
@@ -26,7 +21,11 @@ export const route = {
           path: "/product/list",
           name: "商品列表",
           icon: "https://gw.alipayobjects.com/zos/antfincdn/upvrAjAPQX/Logo_Tech%252520UI.svg",
-          component: "./Welcome",
+        },
+        {
+          path: "/product/list2",
+          name: "商品列表2",
+          icon: "https://gw.alipayobjects.com/zos/antfincdn/upvrAjAPQX/Logo_Tech%252520UI.svg",
         },
         {
           path: "/product/add",

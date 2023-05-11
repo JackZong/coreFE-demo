@@ -4,6 +4,7 @@ import { app } from "core-fe/lib/app";
 
 export class ErrorHandler implements ErrorListener {
   *onError(exception: Exception): SagaGenerator {
+    console.error(exception.message);
     app.logger.error({
       elapsedTime: 0,
       action: "UNKNOWN_ACTION",

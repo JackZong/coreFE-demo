@@ -1,18 +1,17 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
-import { useAction, push, Dispatch } from "core-fe";
-import { useSelector, connect } from "react-redux";
+import React from "react";
+import type { FC } from "react";
+import { useSelector } from "core-fe";
+import { useDispatch } from "react-redux";
 import { RootState } from "../../../type/state.interface";
-import { mainActions, pageModule } from "./page";
-import {
-  PageContainer,
-  ProCard,
-  ProLayout,
-  ProLayoutProps,
-} from "@ant-design/pro-components";
+import { pageActions } from "./page";
+import { PageContainer, ProLayout } from "@ant-design/pro-components";
 import { route } from "../../route/layoutRoute";
 import { RouterComp } from "../../route";
 
-function Main({ changeUrl, pathname }) {
+const Main: FC<{}> = () => {
+  const state = useSelector((state: RootState) => state.app.main);
+
+  const dispatch = useDispatch();
   return (
     <ProLayout
       bgLayoutImgList={[
@@ -37,12 +36,13 @@ function Main({ changeUrl, pathname }) {
       ]}
       route={route}
       location={{
-        pathname,
+        pathname: state.pathname,
       }}
       menuItemRender={(item, dom) => (
         <div
           onClick={() => {
-            changeUrl(item.path);
+            //  changeUrl(item.path);
+            dispatch(pageActions.changeUrl(item.path));
           }}
         >
           {dom}
@@ -54,19 +54,6 @@ function Main({ changeUrl, pathname }) {
       </PageContainer>
     </ProLayout>
   );
-}
-
-const mapStateToProps = (state: RootState) => {
-  return {
-    pathname: state.app.main.pathname,
-  };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    changeTitle: (text) => dispatch(pageModule.getActions().changeTitle(text)),
-    changeUrl: (url) => dispatch(pageModule.getActions().changeUrl(url)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default Main;
