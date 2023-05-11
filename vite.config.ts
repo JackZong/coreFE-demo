@@ -5,6 +5,8 @@ export default defineConfig({
   build: {
     outDir: "../dist",
   },
+  base: "/coreFE-demo/",
+
   // resolve: {
   //   alias: {
   //     "@type": "./type",
